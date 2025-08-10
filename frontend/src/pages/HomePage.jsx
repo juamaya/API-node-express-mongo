@@ -22,18 +22,18 @@ const HomePage = () => {
     try {
       setLoading(true)
       const response = await productService.getProducts({ limit: 100 })
-      
+
       if (response.success) {
         const products = response.data
-        
+
         // Calculate stats
         const totalProducts = products.length
         const totalValue = products.reduce((sum, product) => sum + (product.precio * product.stock), 0)
         const categories = new Set(products.map(p => p.categoria)).size
         const lowStock = products.filter(p => p.stock < 10).length
-        
+
         setStats({ totalProducts, totalValue, categories, lowStock })
-        
+
         // Get recent products (last 5)
         const recent = products.slice(0, 5)
         setRecentProducts(recent)
@@ -77,7 +77,7 @@ const HomePage = () => {
           Bienvenido a ProductStore
         </h1>
         <p className="text-gray-600 max-w-2xl mx-auto">
-          Gestiona tu inventario de productos de manera eficiente. Aquí tienes un resumen 
+          Gestiona tu inventario de productos de manera eficiente. Aquí tienes un resumen
           de tu tienda y acceso rápido a las funciones principales.
         </p>
       </div>
@@ -147,7 +147,7 @@ const HomePage = () => {
             </Link>
           </div>
         </div>
-        
+
         <div className="p-6">
           {recentProducts.length === 0 ? (
             <div className="text-center py-12">
@@ -166,9 +166,22 @@ const HomePage = () => {
               {recentProducts.map(product => (
                 <div key={product._id} className="flex items-center space-x-4 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
                   <div className="flex-shrink-0">
-                    <Package className="h-10 w-10 text-gray-400" />
+                    <Package className="h-10 w-10 text-blue-800" />
                   </div>
-                  
+ 
+                    <img
+                      src={product.imagen || "/images/no-image.png"} // imagen por defecto si no hay
+
+                      className="h-10 w-10 object-contain hover:scale-105 transition-transform duration-200"
+                      onError={(e) => {
+                        e.target.onerror = null // evita bucle infinito
+                        e.target.src = "/images/no-image.png" // imagen fallback
+                      }}
+                    />
+ 
+
+
+
                   <div className="flex-1 min-w-0">
                     <h3 className="text-sm font-medium text-gray-900 truncate">
                       {product.nombre}
@@ -177,7 +190,7 @@ const HomePage = () => {
                       {product.categoria} • {product.stock} unidades
                     </p>
                   </div>
-                  
+
                   <div className="flex-shrink-0 text-right">
                     <p className="text-sm font-medium text-gray-900">
                       {productService.formatPrice(product.precio)}
@@ -186,7 +199,7 @@ const HomePage = () => {
                       {productService.formatDate(product.createdAt)}
                     </p>
                   </div>
-                  
+
                   <div className="flex-shrink-0">
                     <Link
                       to={`/products/${product._id}`}

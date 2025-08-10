@@ -229,6 +229,7 @@ const ProductsPage = () => {
                 {products.map(product => (
                   <ProductCard
                     key={product._id}
+                    
                     product={product}
                     onDelete={handleDeleteProduct}
                   />

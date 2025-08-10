@@ -9,13 +9,14 @@ const Navbar = () => {
   }
 
   return (
-    <nav className="bg-white shadow-lg border-b">
+    <nav className="bg-slate-400 shadow-lg border-b">
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center h-16">
+           <span className="text-xl font-bold text-gray-900">  Juamaya 🚀 2025</span>
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-2">
             <ShoppingBag className="h-8 w-8 text-primary-600" />
-            <span className="text-xl font-bold text-gray-900">ProductStore</span>
+            <span className="text-xl font-bold text-gray-900">ProductStore  </span>
           </Link>
 
           {/* Navigation Links */}

@@ -14,7 +14,7 @@ const ProductFilters = ({ filters, onFiltersChange, onClear }) => {
   const hasActiveFilters = Object.values(filters).some(value => value !== '' && value !== null && value !== undefined)
 
   return (
-    <div className="bg-white rounded-lg shadow-sm border p-6 mb-6">
+    <div className="bg-slate-200 rounded-lg shadow-sm border p-6 mb-6">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center space-x-2">
           <Filter className="h-5 w-5 text-gray-600" />
