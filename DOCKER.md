@@ -9,11 +9,12 @@ Esta guía te ayudará a ejecutar la API de productos usando Docker y Docker Com
 
 ## 📦 Servicios incluidos
 
-El `docker-compose.yml` incluye tres servicios:
+El `docker-compose.yml` incluye cuatro servicios:
 
-1. **API Node.js** - Tu aplicación principal (Puerto 3000)
-2. **MongoDB** - Base de datos (Puerto 27017) 
-3. **Mongo Express** - Interfaz web para MongoDB (Puerto 8081)
+1. **Frontend React** - Interfaz de usuario (Puerto 80)
+2. **API Node.js** - Backend/API REST (Puerto 3000 interno)
+3. **MongoDB** - Base de datos (Puerto 27017) 
+4. **Mongo Express** - Interfaz web para MongoDB (Puerto 8081)
 
 ## 🚀 Comandos rápidos
 
@@ -44,21 +45,31 @@ docker-compose up --build api
 
 ## 📊 Scripts NPM disponibles
 
+### Producción
 ```bash
-npm run docker:build    # Construir imagen de la API
-npm run docker:up       # Iniciar servicios
-npm run docker:down     # Detener servicios
-npm run docker:logs     # Ver logs
-npm run docker:restart  # Reiniciar servicios
+npm run docker:up         # Iniciar todos los servicios (producción)
+npm run docker:down       # Detener todos los servicios
+npm run docker:logs       # Ver logs de todos los servicios
+npm run docker:build:all  # Reconstruir todas las imágenes
+npm run docker:restart    # Reiniciar servicios
+npm run docker:clean      # Limpiar todo (volúmenes e imágenes)
+```
+
+### Desarrollo
+```bash
+npm run docker:up:dev     # Iniciar servicios en modo desarrollo
+npm run docker:down:dev   # Detener servicios de desarrollo
+npm run docker:logs:dev   # Ver logs de desarrollo
 ```
 
 ## 🌐 Puertos y acceso
 
-| Servicio | URL | Puerto |
-|----------|-----|--------|
-| API | http://localhost:3000 | 3000 |
-| MongoDB | mongodb://localhost:27017 | 27017 |
-| Mongo Express | http://localhost:8081 | 8081 |
+| Servicio | URL | Puerto | Descripción |
+|----------|-----|--------|-------------|
+| Frontend | http://localhost | 80 | Interfaz de usuario React |
+| API | http://localhost:3000 | 3000 | API REST (solo desarrollo) |
+| MongoDB | mongodb://localhost:27017 | 27017 | Base de datos |
+| Mongo Express | http://localhost:8081 | 8081 | Administrador de BD |
 
 ### Credenciales de acceso
 
@@ -167,16 +178,28 @@ docker-compose down
 
 ## 🔄 Desarrollo con Docker
 
-Para desarrollo, puedes montar el código como volumen:
+### Modo Desarrollo (docker-compose.dev.yml)
+El archivo `docker-compose.dev.yml` está configurado para desarrollo con:
+- **Hot reload** para backend y frontend
+- **Volúmenes montados** para cambios en tiempo real
+- **Puertos expuestos** para acceso directo
 
-```yaml
-# Agregar en docker-compose.yml bajo el servicio 'api'
-volumes:
-  - .:/usr/src/app
-  - /usr/src/app/node_modules
+```bash
+# Usar modo desarrollo
+npm run docker:up:dev
 ```
 
-Esto permitirá que los cambios en el código se reflejen sin reconstruir la imagen.
+En modo desarrollo:
+- Frontend: http://localhost:5173 (con hot reload)
+- API: http://localhost:3000 (con nodemon)
+- MongoDB: http://localhost:27017
+- Mongo Express: http://localhost:8081
+
+### Modo Producción (docker-compose.yml)
+En producción:
+- Frontend servido por Nginx en puerto 80
+- API interna (no expuesta directamente)
+- Proxy automático de `/api` hacia el backend
 
 ## 🛡️ Consideraciones de seguridad
 

@@ -1,0 +1,79 @@
+version: '3.9'
+
+services:
+  # Servicio de MongoDB (igual que producción)
+  mongodb:
+    image: mongo:7.0
+    container_name: productos_mongodb_dev
+    restart: unless-stopped
+ 
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data_dev:/data/db
+      - ./init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
+    networks:
+      - productos_network
+
+  # API en modo desarrollo con hot reload
+  api-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: development
+    container_name: productos_api_dev
+    restart: unless-stopped
+    depends_on:
+      - mongodb
+    environment:
+      NODE_ENV: development
+      PORT: 3000
+      MONGODB_URI: mongodb://admin:password123@mongodb:27017/productos_db?authSource=admin
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    networks:
+      - productos_network
+    command: npm run dev
+
+  # Frontend en modo desarrollo
+  frontend-dev:
+    image: node:18-alpine
+    container_name: productos_frontend_dev
+    restart: unless-stopped
+    working_dir: /app
+    depends_on:
+      - api-dev
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    networks:
+      - productos_network
+    command: sh -c "npm install && npm run dev -- --host"
+    environment:
+      - VITE_API_URL=http://localhost:3000
+
+  # Mongo Express para desarrollo
+  mongo-express:
+    image: mongo-express:1.0.2
+    container_name: productos_mongo_express_dev
+    restart: unless-stopped
+    depends_on:
+      - mongodb
+     
+    ports:
+      - "8081:8081"
+    networks:
+      - productos_network
+
+volumes:
+  mongodb_data_dev:
+    driver: local
+
+networks:
+  productos_network:
+    driver: bridge

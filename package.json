@@ -9,9 +9,14 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "docker:build": "docker build -t productos-api .",
     "docker:up": "docker-compose up -d",
+    "docker:up:dev": "docker-compose -f docker-compose.dev.yml up -d",
     "docker:down": "docker-compose down",
+    "docker:down:dev": "docker-compose -f docker-compose.dev.yml down",
     "docker:logs": "docker-compose logs -f",
-    "docker:restart": "docker-compose restart"
+    "docker:logs:dev": "docker-compose -f docker-compose.dev.yml logs -f",
+    "docker:restart": "docker-compose restart",
+    "docker:build:all": "docker-compose build",
+    "docker:clean": "docker-compose down -v --rmi all"
   },
   "keywords": ["nodejs", "express", "mongodb", "api", "productos"],
   "author": "",

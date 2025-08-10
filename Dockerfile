@@ -1,22 +1,22 @@
-# Usar la imagen oficial de Node.js 18 LTS
-FROM node:18-alpine
+# Multi-stage Dockerfile para desarrollo y producción
 
-# Crear directorio de trabajo
+# Etapa base
+FROM node:18-alpine as base
 WORKDIR /usr/src/app
-
-# Copiar package.json y package-lock.json (si existe)
 COPY package*.json ./
 
-# Instalar dependencias
-RUN npm ci --only=production
+# Etapa de desarrollo
+FROM base as development
+RUN npm install
+COPY . .
+EXPOSE 3000
+CMD ["npm", "run", "dev"]
 
-# Copiar el código fuente
+# Etapa de producción
+FROM base as production
+RUN npm ci --only=production && npm cache clean --force
 COPY . .
 
- 
-
-# Exponer el puerto
+  
 EXPOSE 3000
-
-# Comando para ejecutar la aplicación
 CMD ["node", "server.js"]
