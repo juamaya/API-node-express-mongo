@@ -126,6 +126,13 @@ curl -X PUT http://localhost:3000/api/productos/PRODUCT_ID \
 │   └── database.js          # Configuración de MongoDB
 ├── controllers/
 │   └── productoController.js # Lógica de controladores
+├── frontend/                # Frontend React + Vite + TailwindCSS
+│   ├── src/
+│   │   ├── components/      # Componentes React
+│   │   ├── pages/          # Páginas de la aplicación
+│   │   └── services/       # Servicios para API
+│   ├── package.json
+│   └── README.md
 ├── middleware/
 │   └── errorHandler.js      # Manejo de errores
 ├── models/
@@ -133,10 +140,46 @@ curl -X PUT http://localhost:3000/api/productos/PRODUCT_ID \
 ├── routes/
 │   └── productos.js         # Rutas de la API
 ├── .env                     # Variables de entorno
+├── docker-compose.yml       # Docker Compose
+├── Dockerfile              # Imagen Docker
+├── DOCKER.md               # Documentación Docker
 ├── package.json
 ├── README.md
 └── server.js               # Servidor principal
 ```
+
+## 🎨 Frontend (Interfaz de Usuario)
+
+Este proyecto incluye un frontend completo construido con tecnologías modernas:
+
+### Tecnologías Frontend
+- **React 18** - Framework de JavaScript
+- **Vite** - Build tool rápido
+- **TailwindCSS** - Framework CSS
+- **React Router** - Navegación SPA
+- **Axios** - Cliente HTTP
+- **React Hot Toast** - Notificaciones
+- **Lucide React** - Iconos
+
+### Funcionalidades Frontend
+- 🏠 **Dashboard interactivo** con estadísticas
+- 📋 **Lista de productos** con filtros avanzados
+- 🔍 **Búsqueda** por nombre, categoría y precio
+- ➕ **Crear productos** con validación de formularios
+- ✏️ **Editar productos** existentes
+- 🗑️ **Eliminar productos** con confirmación
+- 📱 **Diseño responsive** para móviles y tablets
+- 🎯 **Paginación** automática de resultados
+- 🔔 **Notificaciones** de éxito y error
+
+### Ejecutar Frontend
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+El frontend estará disponible en `http://localhost:5173`
 
 ## 🔒 Seguridad
 
